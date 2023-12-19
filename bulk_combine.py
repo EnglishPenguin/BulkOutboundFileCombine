@@ -2,7 +2,6 @@ from glob import glob
 import pandas as pd
 from datetime import datetime as dt
 from logger_setup import logger
-from tkinter import filedialog as fd
 from tkinter import simpledialog as sd
 from tkinter import messagebox
 import mappings
@@ -20,12 +19,13 @@ class RPA_File_Month_Combine():
         
         # Retrieve today's date and confirm with user 
         self.today = dt.today()
+        logger.info(f'Starting combine process for {self.use_case}')
         logger.info(f'Current month and year: {dt.strftime(self.today, "%m/%Y")}')
-        logger.debug('Confirming Month')
-        answer = messagebox.askyesno("Question", f"Do you want to run the month {dt.strftime(self.today, '%B')}?")
+        logger.info('Confirming month with user')
+        answer = messagebox.askyesno(f"{self.use_case}", f"Do you want to run the month {dt.strftime(self.today, '%B')}?")
         if not answer:
             logger.info('Current month not selected')
-            logger.debug('Confirming month to be combined')
+            logger.info('Asking user to select month to be combined')
             # ask user to select a month number
             self.month = sd.askinteger("Follow Up", "Please enter a month number (e.g. March = 3): ", minvalue=1, maxvalue=12)
             if self.month == "":
@@ -63,7 +63,7 @@ class RPA_File_Month_Combine():
         logger.info(f'Retrieving Files for {self.today_str}')
         self.files_list = glob(self.name_format)
         self.num_files = len(self.files_list)
-        logger.debug(f'{self.num_files} files found to be combined')
+        logger.info(f'{self.num_files} files found to be combined')
     
     def combine_files(self):
         # take glob list and read excel. Combine dataframes into 1
@@ -86,7 +86,7 @@ class RPA_File_Month_Combine():
             self.df_comb['Business Status'] = self.df_comb.apply(lambda row: self.get_business_status(row), axis=1)
             logger.info('Translating Business Scenarios')
             self.df_comb['Business Scenario'] = self.df_comb.apply(lambda row: self.get_business_scenario(row), axis=1)
-            logger.debug(f'There are {self.num_lines} lines to export')
+            logger.info(f'There are {self.num_lines} lines to export')
 
     def get_business_status(self, row):
         # based on mappings status crosswalk, retrievel relevant business status

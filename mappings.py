@@ -1,86 +1,47 @@
-rd_status_crosswalk_1236 = {
-    "Patient Not Found": "Business Exception",
-    "Encounter reviewed": "Business Success",
-    "Pending Representative Review": "Business Exception", 
-    "No Proc Code to Extract": "Technical Exception", 
-    "PopUp while editing 'Proc'": "Technical Exception",
-    "Update Task Failed": "Technical Exception",
-    "CPT not in Crosswalk": "Business Exception", 
-    "No Proc Code to Edit": "Technical Exception", 
-    "Page Edit Selector Header not found": "Technical Exception", 
-    "Edit Transaction Failed": "Technical Exception", 
-    "": "Other"
-}
-
-rd_scenario_crosswalk_1236 = {
-    "Patient Not Found": "No search results after searching for encounter",
-    "Encounter reviewed": "End-to-end Success",
-    "Pending Representative Review": "Multiple Edits found on encounter", 
-    "No Proc Code to Extract": "Unable to determine which CPT to be modified", 
-    "PopUp while editing 'Proc'": "Pop-up encountered while editing the CPT",
-    "Update Task Failed": "Failed to add note to the encounter",
-    "CPT not in Crosswalk": "Lookup Key Missing from Crosswalk", 
-    "No Proc Code to Edit": "Unable to Extract the CPT from the Edit Descr", 
-    "Page Edit Selector Header not found": "Unable to detect the Edit Selector Header screen", 
-    "Edit Transaction Failed": "Unable to edit the transaction details", 
-    "": "Manually excluded volume"
-}
-
-columns_1236 = [
-    "PTFULLNAME",
-    "INVNUM",
-    "CRN#",
-    "CPT",
-    "Reason",
-    "BotName",
-    "RetrievalStatus",
-    "RetrievalDescription",
-    "StatusCode",
-    "StatusDescription",
-    "RecordAttemptCount",
-    "RecordAttemptMachineName",
-    "CPConfigID",
-    "FileID",
-    "SeqID",
-    "BOTRequestDate",
-    "TransactionStartDate",
-    "TransactionEndDate",
-    "BatchID",
-    "URN",
-    "CreatedDate",
-    "LastModifiedBy",
-    "LastModifiedDate",
-    "ProcessComments"
-]
-
-use_case_file_path = {
-    "CSE1235": "M:/CPP-Data/Sutherland RPA/Coding/CSE1235",
-    "CSE1236": "M:/CPP-Data/Sutherland RPA/Coding/CSE1236",
-    "TES1249": "M:/CPP-Data/Sutherland RPA/Coding/TES1249",
-    "TES6146": "M:/CPP-Data/Sutherland RPA/Coding/TES6146"
-}
-
-use_case_out_path = {
-    "CSE1235": "M:/CPP-Data/Sutherland RPA/Coding/CSE1235/Monthly Combined",
-    "CSE1236": "M:/CPP-Data/Sutherland RPA/Coding/CSE1236/References/Monthly Combined",
-    "TES1249": "M:/CPP-Data/Sutherland RPA/Coding/TES1249/Monthly Combined",
-    "TES6146": "M:/CPP-Data/Sutherland RPA/Coding/TES6146/Monthly Combined"
-}
-
 use_case_dict = {
     "CSE1235": {
         "file_path": "M:/CPP-Data/Sutherland RPA/Coding/CSE1235",
         "out_path": "M:/CPP-Data/Sutherland RPA/Coding/CSE1235/Monthly Combined",
         "columns": [
-
+            "PTFULLNAME",
+            "INVNUM",
+            "CRN#",
+            "RetrievalStatus",
+            "RetrievalDescription",
+            "RecordAttemptMachineName",
+            "CPConfigID",
+            "FileID",
+            "SeqID",
+            "TransactionStartDate",
+            "TransactionEndDate",
+            "BatchID",
+            "URN",
+            "CreatedDate",
+            "LastModifiedBy",
+            "LastModifiedDate",
+            "ProcessComments",
         ],
         "status_crosswalk": {
-
+            "Encounter reviewed": "Business Success",
+            "Pending Representative Review": "Business Exception",
+            "Patient Not Found": "Business Exception",
+            "Edit Transaction Failed": "Technical Exception",
+            "Update Task Failed": "Technical Exception",
+            "Procedure is not listed": "Business Exception",
+            "No access to 'Edit Transaction'": "Technical Exception",
+            "No Procedure Code": "Technical Exception",
         },
         "scenario_crosswalk": {
-
+            "Encounter reviewed": "End-to-end Success",
+            "Pending Representative Review": "Business Rule pended for further review",
+            "Patient Not Found": "No search results for encounter number",
+            "Edit Transaction Failed": "Unrecognized success",
+            "Update Task Failed": "Unable to add note",
+            "Procedure is not listed": "Procedure Code not on Crosswalk",
+            "No access to 'Edit Transaction'": "Batch on hold or Encounter in use",
+            "No Procedure Code": "Unable to access the Procedure Codes",
         },
-        "name_format": "{file_path}/*Outbound_{month_str}*{year_str}.xlsx"
+        "name_format": "{file_path}/*Outbound_{month_str}*{year_str}.xlsx",
     },
     "CSE1236": {
         "file_path": "M:/CPP-Data/Sutherland RPA/Coding/CSE1236",
@@ -143,28 +104,264 @@ use_case_dict = {
         "file_path": "M:/CPP-Data/Sutherland RPA/Coding/TES1249",
         "out_path": "M:/CPP-Data/Sutherland RPA/Coding/TES1249/Monthly Combined",
         "columns": [
-
+            "GECBMRN",
+            "PTFULLNAME",
+            "SERFROMDT",
+            "INVNUM",
+            "CRN#",
+            "PROVFULLNAME",
+            "BusinessEmail",
+            "CPT",
+            "PrimaryDx",
+            "Location",
+            "OriginalLocation",
+            "OriginalDX",
+            "RetrievalStatus",
+            "RetrievalDescription",
+            "RecordAttemptMachineName",
+            "CPConfigID",
+            "FileID",
+            "SeqID",
+            "TransactionStartDate",
+            "TransactionEndDate",
+            "BatchID",
+            "URN",
+            "CreatedDate",
+            "LastModifiedBy",
+            "LastModifiedDate",
+            "ProcessComments",
         ],
         "status_crosswalk": {
-
+            "Modifier Added to E/M": "Business Success",
+            "No Reference Encounter": "Technical Exception",
+            "Update Task Failed": "Technical Exception",
+            "E/M Changed to 99024": "Business Success",
+            "C00-Pending Representative Review": "Business Exception",
+            "Procedure is not listed": "Business Exception",
+            "Patient Not Found": "Business Exception",
+            "No Proc Code to Edit": "Technical Exception",
+            "Page Edit Selector Header not found": "Technical Exception",
         },
         "scenario_crosswalk": {
-
+            "Modifier Added to E/M": "End-to-end Success",
+            "No Reference Encounter": "Unable to find correct edit description",
+            "Update Task Failed": "Unable to add note",
+            "E/M Changed to 99024": "End-to-end Success; CPT updated",
+            "C00-Pending Representative Review": "Business Rule pended for further review",
+            "Procedure is not listed": "Procedure Code not on Crosswalk",
+            "Patient Not Found": "No search results for encounter number",
+            "No Proc Code to Edit": "Unable to access the Procedure Codes",
+            "Page Edit Selector Header not found": "Unable to confirm on Edit Desc screen",
         },
-        "name_format": "{file_path}/*Outbound_{month_str}*{year_str}.xlsx"
+        "name_format": "{file_path}/*Outbound_{month_str}*{year_str}.xlsx",
     },
     "TES6146": {
         "file_path": "M:/CPP-Data/Sutherland RPA/Coding/TES6146",
         "out_path": "M:/CPP-Data/Sutherland RPA/Coding/TES6146/Monthly Combined",
         "columns": [
-
+            "GECBMRN",
+            "PTFULLNAME",
+            "SERFROMDT",
+            "INVNUM",
+            "CRN#",
+            "PROVFULLNAME",
+            "BusinessEmail",
+            "CPT",
+            "PrimaryDx",
+            "Location",
+            "OriginalLocation",
+            "OriginalDX",
+            "RetrievalStatus",
+            "RetrievalDescription",
+            "RecordAttemptMachineName",
+            "CPConfigID",
+            "FileID",
+            "SeqID",
+            "TransactionStartDate",
+            "TransactionEndDate",
+            "BatchID",
+            "URN",
+            "CreatedDate",
+            "LastModifiedBy",
+            "LastModifiedDate",
+            "ProcessComments",
         ],
         "status_crosswalk": {
+            "DX pointers updated": "Business Success",
+            "Procedure is not listed": "Business Exception",
+            "Email sent to provider": "Business Success",
+            "No access to 'Edit Transaction'": "Technical Exception",
+            "Patient Not Found": "Business Exception",
+            "Pending Representative Review": "Business Exception",
+            "No E-Mail Mandatory fields": "Business Exception",
+            "PRR Hyperlink Not Click": "Technical Exception",
+            "Update Task Failed": "Technical Exception",
+            "Email not sent to provider": "Technical Exception",
+            "DX pointers updating failed": "Technical Exception",
+        },
+        "scenario_crosswalk": {
+            "DX pointers updated": "End-to-end Success",
+            "Procedure is not listed": "Procedure Code not on Crosswalk",
+            "Email sent to provider": "End-to-end Success; Provider Emailed",
+            "No access to 'Edit Transaction'": "Batch on hold or Encounter in use",
+            "Patient Not Found": "No search results for encounter number",
+            "Pending Representative Review": "Business Rule pended for further review",
+            "No E-Mail Mandatory fields": "Missing email address for provider",
+            "PRR Hyperlink Not Click": "Unable to click PRR hyperlink",
+            "Update Task Failed": "Unable to add note",
+            "Email not sent to provider": "Unable to send email",
+            "DX pointers updating failed": "Unable to update DX pointers",
+        },
+        "name_format": "{file_path}/*Outbound_{month_str}*{year_str}.xlsx",
+    },
+    "MCD MCO": {
+        "file_path": "M:/FPP-CPP/Revenue Cycle Operations Training/Projects/RPA Project/MCD MCO Available",
+        "out_path": "M:/FPP-CPP/Revenue Cycle Operations Training/Projects/RPA Project/MCD MCO Available/Monthly Combined",
+        "columns": [
+            "RetrievalDescription",
+        ],
+        "status_crosswalk": {
+            "C00-Completed": "Business Success",
+            "E03-BOT encountered unexpected screen elements or new screen and could not navigate": "Technical Exception",
+            "BE01-BE01-Non-HDX Payer": "Business Exception",
+            "C00 - Payor is not available in the crosswalk": "Business Exception",
+            "C00 - Data is not available under the Coverage section (eCN)": "Business Exception",
+            "E16-Failed to enter the account number into search box": "Technical Exception",
+            "BE01-Special Characters Found error pop-up encountered.": "Business Exception",
+            "E07-Mandatory fields are missing in the received input": "Technical Exception",
+            "BE01-Unexpected screen occured ": "Technical Exception",
+            "E16-BOT encountered unexpected screen elements or new screen and could not navigate": "Technical Exception",
+            "C00 - C00-No Data Availible for this Encounter": "Business Exception",
+            "E16-Coverage Tab is Empty": "Technical Exception",
+            "E16-An Attending Physician is required.": "Technical Exception",
 
         },
         "scenario_crosswalk": {
+            "C00-Completed": "End-to-end Success",
+            "E03-BOT encountered unexpected screen elements or new screen and could not navigate": "New/Unexpected Screen",
+            "BE01-BE01-Non-HDX Payer": "Non-HDX Payer",
+            "C00 - Payor is not available in the crosswalk": "Payor not in Crosswalk",
+            "C00 - Data is not available under the Coverage section (eCN)": "No payor data in eCN",
+            "E16-Failed to enter the account number into search box": "Unable to input account number",
+            "BE01-Special Characters Found error pop-up encountered.": "Special Characters Pop Up",
+            "E07-Mandatory fields are missing in the received input": "Missing mandatory fields in input",
+            "BE01-Unexpected screen occured ": "New/Unexpected Screen",
+            "E16-BOT encountered unexpected screen elements or new screen and could not navigate": "New/Unexpected Screen",
+            "C00 - C00-No Data Availible for this Encounter": "No account found after search in SF",
+            "E16-Coverage Tab is Empty": "No payor data in eCN",
+            "E16-An Attending Physician is required.": "Attending Phys pop up",
 
         },
-        "name_format": "{file_path}/*Outbound_{month_str}*{year_str}.xlsx"
+        "name_format": "{file_path}/*Outbound_{month_str}*{year_str}.xlsx",
     },
+    "MCR ADV": {
+        "file_path": "M:/FPP-CPP/Revenue Cycle Operations Training/Projects/RPA Project/MCR Advantage",
+        "out_path": "M:/FPP-CPP/Revenue Cycle Operations Training/Projects/RPA Project/MCR Advantage/Monthly Combined",
+        "columns": [
+            "RetrievalDescription"
+        ],
+        "status_crosswalk": {
+            "C00 - Completed": "Business Success",
+            "E03-BOT encountered unexpected screen elements or new screen and could not navigate": "Technical Exception",
+            "BE01-Special Characters Found error pop-up encountered.": "Business Exception",
+            "C00 - Plan Code not present in Ecare": "Business Exception",
+            "BE01-BE01-Non-HDX Payer": "Business Exception",
+            "C00 - Plan Code not available in given Master Sheet": "Business Exception",
+            "C00 - C00-Completed": "Business Success",
+            "C00 - C00-No Data Availible for this Encounter": "Business Exception",
+            "E16-BOT encountered unexpected screen elements or new screen and could not navigate": "Technical Exception",
+            "E16-Failed to select the patient": "Technical Exception",
+            "C00 - Data is not available under the Coverage section (eCN)": "Business Exception",
+            "E16-Failed to enter the account number into search box": "Technical Exception",
+            "BE01-Revise Encounter Details Option Not Found": "Business Exception",
+            "E16-Coverage Tab is Empty": "Technical Exception",
+            "E16-The Policy Number Does Not Match": "Technical Exception",
+            "E16-Unexpected screen occured eligibilityhyperlink not available": "Technical Exception",
+
+        },
+        "scenario_crosswalk": {
+            "C00 - Completed": "End-to-end Success",
+            "E03-BOT encountered unexpected screen elements or new screen and could not navigate": "New/Unexpected Screen",
+            "BE01-Special Characters Found error pop-up encountered.": "Special Characters Pop Up",
+            "C00 - Plan Code not present in Ecare": "No payor data in eCN",
+            "BE01-BE01-Non-HDX Payer": "Non-HDX Payer",
+            "C00 - Plan Code not available in given Master Sheet": "Plan Code not in Crosswalk",
+            "C00 - C00-Completed": "End-to-end Success",
+            "C00 - C00-No Data Availible for this Encounter": "No account found after search in SF",
+            "E16-BOT encountered unexpected screen elements or new screen and could not navigate": "New/Unexpected Screen",
+            "E16-Failed to select the patient": "Unable to select patient",
+            "C00 - Data is not available under the Coverage section (eCN)": "No payor data in eCN",
+            "E16-Failed to enter the account number into search box": "Unable to input account number",
+            "BE01-Revise Encounter Details Option Not Found": "Revise Enc Hyperlink Not Available",
+            "E16-Coverage Tab is Empty": "No payor data in eCN",
+            "E16-The Policy Number Does Not Match": "Policy Number Mismatch pop up",
+            "E16-Unexpected screen occured eligibilityhyperlink not available": "New/Unexpected Screen",
+
+        },
+        "name_format": "{file_path}/*Outbound_{month_str}*{year_str}.xlsx",
+    },    
+    "MCR PARTB": {
+        "file_path": "M:/FPP-CPP/Revenue Cycle Operations Training/Projects/RPA Project/MCR PartB Inactive",
+        "out_path": "M:/FPP-CPP/Revenue Cycle Operations Training/Projects/RPA Project/MCR PartB Inactive/Monthly Combined",
+        "columns": [
+            "RetrievalDescription"
+        ],
+        "status_crosswalk": {
+            "C00-Unallocated Polices": "Business Success",
+            "BE01-Special Characters Found error pop-up encountered.": "Business Exception",
+            "BE01-Pop-up error states a patient insurance policy needs to be allocated to this encounter": "Business Exception",
+            "C00-Policies are not available under Allocated Policies": "Business Exception",
+
+        },
+        "scenario_crosswalk": {
+            "C00-Unallocated Polices": "End-to-end Success",
+            "BE01-Special Characters Found error pop-up encountered.": "Special Characters Pop Up",
+            "BE01-Pop-up error states a patient insurance policy needs to be allocated to this encounter": "Policy needs to be allocated pop up",
+            "C00-Policies are not available under Allocated Policies": "Policies are not available in the well",
+
+        },
+        "name_format": "{file_path}/*Outbound_{month_str}*{year_str}.xlsx",
+    },    
+    "MNP": {
+        "file_path": "M:/FPP-CPP/Revenue Cycle Operations Training/Projects/RPA Project/Medicare Not Primary",
+        "out_path": "M:/FPP-CPP/Revenue Cycle Operations Training/Projects/RPA Project/Medicare Not Primary/Monthly Combined",
+        "columns": [
+            "RetrievalDescription"
+        ],
+        "status_crosswalk": {
+            "C00-Health plans reordered": "Business Success",
+        },
+        "scenario_crosswalk": {
+            "C00-Health plans reordered": "End-to-end Success",
+        },
+        "name_format": "{file_path}/*Outbound_{month_str}*{year_str}.xlsx",
+    },    
+    "NCOA": {
+        "file_path": "M:/FPPShare/FPP-Production/NCOA BOT",
+        "out_path": "M:/FPPShare/FPP-Production/NCOA BOT/Monthly Combined",
+        "columns": [
+            "RetrievalDescription"
+        ],
+        "status_crosswalk": {
+            "C00:New address Added successfully": "Business Success",
+        },
+        "scenario_crosswalk": {
+            "C00:New address Added successfully": "End-to-end Success; Address Added"
+        },
+        "name_format": "{file_path}/{year_str}{month_str}*OUTBOUND.xlsx",
+    },    
+    "PRINT IS": {
+        "file_path": "M:/FPPShare/FPP-Production/Itemized Statement HCX BOT",
+        "out_path": "M:/FPPShare/FPP-Production/Itemized Statement HCX BOT/Monthly Combined",
+        "columns": [
+            "RetrievalDescription"
+        ],
+        "status_crosswalk": {
+            "ISP: Itemized Statement Printed": "Business Success",
+        },
+        "scenario_crosswalk": {
+            "ISP: Itemized Statement Printed": "End-to-end Success",
+        },
+        "name_format": "{file_path}/{year_str}{month_str}*OUTBOUND.xlsx",
+    },    
 }
