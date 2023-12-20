@@ -16,6 +16,7 @@ class RPA_File_Month_Combine():
         self.scenario_crosswalk = mappings.use_case_dict[f"{self.use_case}"]["scenario_crosswalk"]
         self.use_case_columns = mappings.use_case_dict[f"{self.use_case}"]["columns"]
         self.name_format_str = mappings.use_case_dict[f"{self.use_case}"]["name_format"]
+        self.columns_crosswalk = mappings.use_case_dict[f"{self.use_case}"]["column_crosswalk"]
         
         # Retrieve today's date and confirm with user 
         self.today = dt.today()
@@ -86,6 +87,8 @@ class RPA_File_Month_Combine():
             self.df_comb['Business Status'] = self.df_comb.apply(lambda row: self.get_business_status(row), axis=1)
             logger.info('Translating Business Scenarios')
             self.df_comb['Business Scenario'] = self.df_comb.apply(lambda row: self.get_business_scenario(row), axis=1)
+            # Rename the columns based on the grid
+            self.df_comb.rename(columns=self.columns_crosswalk, inplace=True)
             logger.info(f'There are {self.num_lines} lines to export')
 
     def get_business_status(self, row):
@@ -108,4 +111,3 @@ class RPA_File_Month_Combine():
         except OSError:
             logger.critical("Failed to combine files")
             exit()
-
