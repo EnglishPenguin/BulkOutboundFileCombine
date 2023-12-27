@@ -23,24 +23,28 @@ class RPA_File_Month_Combine():
         logger.info(f'Starting combine process for {self.use_case}')
         logger.info(f'Current month and year: {dt.strftime(self.today, "%m/%Y")}')
         logger.info('Confirming month with user')
-        answer = messagebox.askyesno(f"{self.use_case}", f"Do you want to run the month {dt.strftime(self.today, '%B')}?")
+        answer = messagebox.askyesno(f"{self.use_case}", f"Do you want to run for the month of {dt.strftime(self.today, '%B %Y')}?")
         if not answer:
-            logger.info('Current month not selected')
+            logger.debug('Current month & year not selected')
             logger.info('Asking user to select month to be combined')
             # ask user to select a month number
             self.month = sd.askinteger("Follow Up", "Please enter a month number (e.g. March = 3): ", minvalue=1, maxvalue=12)
+            self.year = sd.askinteger("Follow Up", "Please enter a year: ", minvalue=2020, maxvalue=2030)
             if self.month == "":
-                logger.critical("No month selected; Stopping Process")
+                logger.critical("No month selected")
+                logger.info("Stopping Process")
                 exit()
             try:
                 # set date variables to month selected by user
                 date = self.today.replace(month=self.month)
+                date = date.replace(year=self.year)
                 self.month_str = dt.strftime(date, "%m")
                 self.today_str = dt.strftime(date, "%m/%Y")
                 self.month_name = dt.strftime(date, "%B")
                 self.year_str = dt.strftime(date, "%Y")
             except TypeError:
-                logger.critical("No month selected; Stopping Process")
+                logger.critical("No month selected")
+                logger.info("Stopping Process")
                 exit()
         else:
             # set date variables to current month
@@ -64,11 +68,11 @@ class RPA_File_Month_Combine():
         logger.info(f'Retrieving Files for {self.today_str}')
         self.files_list = glob(self.name_format)
         self.num_files = len(self.files_list)
-        logger.info(f'{self.num_files} files found to be combined')
+        logger.debug(f'{self.num_files} files found to be combined')
     
     def combine_files(self):
         # take glob list and read excel. Combine dataframes into 1
-        logger.info(f'Attempting to combine files')
+        logger.debug(f'Attempting to combine files')
         self.df_list = []
         try:
             for f in self.files_list:
@@ -83,13 +87,13 @@ class RPA_File_Month_Combine():
             exit()
         else:
             # apply business status and scenario crosswalk to the files
-            logger.info('Evaluating Business Status')
+            logger.debug('Evaluating Business Status')
             self.df_comb['Business Status'] = self.df_comb.apply(lambda row: self.get_business_status(row), axis=1)
-            logger.info('Translating Business Scenarios')
+            logger.debug('Translating Business Scenarios')
             self.df_comb['Business Scenario'] = self.df_comb.apply(lambda row: self.get_business_scenario(row), axis=1)
             # Rename the columns based on the grid
             self.df_comb.rename(columns=self.columns_crosswalk, inplace=True)
-            logger.info(f'There are {self.num_lines} lines to export')
+            logger.debug(f'There are {self.num_lines} lines to export')
 
     def get_business_status(self, row):
         # based on mappings status crosswalk, retrievel relevant business status
