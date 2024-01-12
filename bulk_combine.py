@@ -76,9 +76,10 @@ class RPA_File_Month_Combine():
         self.df_list = []
         try:
             for f in self.files_list:
-                df_temp = pd.read_excel(f, engine='openpyxl')
+                df_temp = pd.read_excel(f, engine='openpyxl', na_values=" ", keep_default_na=False)
                 self.df_list.append(df_temp)
             self.df_comb = pd.concat(self.df_list)
+            self.df_comb["RD + Reason"] = self.df_comb['RetrievalDescription']+" - "+self.df_comb['Reason']
             self.df_comb = self.df_comb.loc[:, self.use_case_columns]
             self.num_lines = len(self.df_comb)
         except ValueError:
@@ -98,12 +99,12 @@ class RPA_File_Month_Combine():
     def get_business_status(self, row):
         # based on mappings status crosswalk, retrievel relevant business status
         # If Key not found in crosswalk, will return Unknown value
-        return self.status_crosswalk.get(row['RetrievalDescription'], 'Unknown')
+        return self.status_crosswalk.get(row['RD + Reason'], 'Unknown')
     
     def get_business_scenario(self, row):
         # based on mappings scenarios crosswalk, retrievel relevant business scenarios
         # If Key not found in crosswalk, will return Unknown value
-        return self.scenario_crosswalk.get(row['RetrievalDescription'], 'Unknown')
+        return self.scenario_crosswalk.get(row['RD + Reason'], 'Unknown')
     
     def export_to_excel(self):
         # save master dataframe with status/scenarios to expected file path based on use case
