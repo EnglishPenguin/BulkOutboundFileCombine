@@ -8,8 +8,11 @@ import mappings
 
 
 class RPA_File_Month_Combine():
-    def __init__(self, use_case):
+    def __init__(self, use_case, today, month, year):
         self.use_case = use_case
+        self.today = today
+        self.month = month
+        self.year = year
         self.file_path = mappings.use_case_dict[f"{self.use_case}"]["file_path"]
         self.out_path = mappings.use_case_dict[f"{self.use_case}"]["out_path"]
         self.status_crosswalk = mappings.use_case_dict[f"{self.use_case}"]["status_crosswalk"]
@@ -19,25 +22,18 @@ class RPA_File_Month_Combine():
         self.columns_crosswalk = mappings.use_case_dict[f"{self.use_case}"]["column_crosswalk"]
         
         # Retrieve today's date and confirm with user 
-        self.today = dt.today()
+    def get_date_and_date_strings(self):
         logger.info(f'Starting combine process for {self.use_case}')
-        logger.info(f'Current month and year: {dt.strftime(self.today, "%m/%Y")}')
-        logger.info('Confirming month with user')
-        answer = messagebox.askyesno(f"{self.use_case}", f"Do you want to run for the month of {dt.strftime(self.today, '%B %Y')}?")
-        if not answer:
-            logger.debug('Current month & year not selected')
-            logger.info('Asking user to select month to be combined')
-            # ask user to select a month number
-            self.month = sd.askinteger("Follow Up", "Please enter a month number (e.g. March = 3): ", minvalue=1, maxvalue=12)
-            self.year = sd.askinteger("Follow Up", "Please enter a year: ", minvalue=2020, maxvalue=2030)
-            if self.month == "":
-                logger.critical("No month selected")
-                logger.info("Stopping Process")
-                exit()
+        if self.month == 0 and self.year == 0:
+            # set date variables to current month
+            self.month_str = dt.strftime(self.today, "%m")
+            self.month_name = dt.strftime(self.today, "%B")
+            self.today_str = dt.strftime(self.today, "%m/%Y")
+            self.year_str = dt.strftime(self.today, "%Y") 
+        else:
             try:
                 # set date variables to month selected by user
-                date = self.today.replace(month=self.month)
-                date = date.replace(year=self.year)
+                date = self.today.replace(month=self.month, year=self.year)
                 self.month_str = dt.strftime(date, "%m")
                 self.today_str = dt.strftime(date, "%m/%Y")
                 self.month_name = dt.strftime(date, "%B")
@@ -46,22 +42,13 @@ class RPA_File_Month_Combine():
                 logger.critical("No month selected")
                 logger.info("Stopping Process")
                 exit()
-        else:
-            # set date variables to current month
-            self.month_str = dt.strftime(self.today, "%m")
-            self.month_name = dt.strftime(self.today, "%B")
-            self.today_str = dt.strftime(self.today, "%m/%Y")
-            self.year_str = dt.strftime(self.today, "%Y")
-        
+            
+    def format_name(self):
         self.name_format = self.name_format_str.format(
             file_path=self.file_path,
             month_str=self.month_str,
             year_str=self.year_str
         )
-
-        self.get_files()
-        self.combine_files()
-        self.export_to_excel()
 
     def get_files(self):
         # retrieve the file paths and glob together into one list
@@ -76,16 +63,24 @@ class RPA_File_Month_Combine():
         self.df_list = []
         try:
             for f in self.files_list:
-                df_temp = pd.read_excel(f, engine='openpyxl', na_values=" ", keep_default_na=False)
-                self.df_list.append(df_temp)
+                if '~$' not in f:
+                    # print(f)
+                    df_temp = pd.read_excel(f, engine='openpyxl', na_values=" ", keep_default_na=False)
+                    df_temp['FileName'] = f
+                    self.df_list.append(df_temp)
+                else:
+                    continue
             self.df_comb = pd.concat(self.df_list)
+            self.df_comb['RetrievalDescription'] = self.df_comb['RetrievalDescription'].astype(str)
+            self.df_comb['Reason'] = self.df_comb['Reason'].astype(str)
             self.df_comb["RD + Reason"] = self.df_comb['RetrievalDescription']+" - "+self.df_comb['Reason']
             self.df_comb = self.df_comb.loc[:, self.use_case_columns]
             self.num_lines = len(self.df_comb)
+            if self.num_lines == 0:
+                raise ValueError
         except ValueError:
             logger.error(f'No files to combine for {self.today_str}')
-            logger.info('Stopping Process')
-            exit()
+            return
         else:
             # apply business status and scenario crosswalk to the files
             logger.debug('Evaluating Business Status')
@@ -116,3 +111,6 @@ class RPA_File_Month_Combine():
         except OSError:
             logger.critical("Failed to combine files")
             exit()
+        except AttributeError:
+            logger.info('Proceeding to next use case')
+            return
